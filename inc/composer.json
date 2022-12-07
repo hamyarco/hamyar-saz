@@ -1,0 +1,16 @@
+{
+    "name": "hamyar/hamyar-saz",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "HamyarSaz\\": ""
+        }
+    },
+    "authors": [
+        {
+            "name": "alireza azami",
+            "email": "alireza.azami@gmail.com"
+        }
+    ],
+    "require": {}
+}
