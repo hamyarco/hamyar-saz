@@ -85,7 +85,9 @@ extract(hsaz_default_args($default_args,$arg));
     <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
         <?php foreach (\HamyarSaz\core\navbar::menu() as $parent):?>
             <li class="bold <?php hsaz_active_menu($parent['url'],'active open') ?>">
-                <a class="<?php echo (!empty($parent['childs']))?'collapsible-header': hsaz_active_menu($parent['childs']['url'],'active',false) ?> waves-effect waves-cyan " href="<?php echo (isset($parent['url']) && empty($parent['childs']))? '/'.(is_array($parent['url'])?$parent['url'][0]:$parent['url']):'JavaScript:void(0)' ?>"><i class="material-icons"><?php echo $parent['icon'] ?></i><span class="menu-title"><span ><?php echo $parent['title'] ?></span></span></a>
+                <a class="<?php echo (!empty($parent['childs']))?'collapsible-header':
+                    hsaz_active_menu($parent['url'],'active',false) ?> waves-effect waves-cyan "
+                   href="<?php echo (isset($parent['url']) && empty($parent['childs']))? '/'.(is_array($parent['url'])?$parent['url'][0]:$parent['url']):'JavaScript:void(0)' ?>"><i class="material-icons"><?php echo $parent['icon'] ?></i><span class="menu-title"><span ><?php echo $parent['title'] ?></span></span></a>
                 <div class="collapsible-body">
                     <ul class="collapsible collapsible-sub" data-collapsible="accordion">
                         <?php if(isset($parent['childs'])) foreach ($parent['childs'] as $child): ?>

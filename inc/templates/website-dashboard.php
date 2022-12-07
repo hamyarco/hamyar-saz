@@ -1,10 +1,5 @@
 <?php   defined('ABSPATH') || exit ("no access");
-$site_list=\HamyarSaz\core\package::get_instance()->getPackages();
-if (empty($site_list)){
-    header("Location: ".home_url('/hamsaz/start/'));
-//    \HamyarSaz\core\endPoint::loadTemplate('start');
-    return;
-}
+$post_view=class_exists('Post_Views_Counter_Dashboard')? new Post_Views_Counter_Dashboard():wp_die('Post_Views_Counter_Dashboard class not found');
 ?>
 <?php \HamyarSaz\core\helpers::template( 'header',['title'=>'داشبورد','direct_styles'=>[POST_VIEWS_COUNTER_URL . '/css/admin-dashboard.min.css',POST_VIEWS_COUNTER_URL . '/assets/microtip/microtip.min.css']]); ?>
 <?php   wp_print_styles(['pvc-admin-dashboard','pvc-microtip']) ?>

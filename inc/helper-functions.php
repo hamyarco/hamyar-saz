@@ -47,6 +47,9 @@ function hsaz_active_menu($current_menu_array='', $active_class='active',$parent
     }
 
     foreach ($current_menu_array as $current_menu){
+        if(is_array($current_menu)){
+            return;
+        }
         $current_menu=trim($current_menu,'/');
         if ($active_menu==$current_menu){
             echo $active_class;

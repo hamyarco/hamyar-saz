@@ -12,6 +12,7 @@ namespace HamyarSaz;
 use HamyarSaz\core\ajax;
 use HamyarSaz\core\endPoint;
 use HamyarSaz\core\enqueue;
+use HamyarSaz\core\package;
 use HamyarSaz\core\template;
 
 class main
@@ -53,6 +54,7 @@ class main
         enqueue::get_instance();
         ajax::get_instance();
         template::get_instance();
+        package::get_instance();
 //        module_loader::get_instance();
 //        admin_menu::get_instance();
 //        cron::get_instance();

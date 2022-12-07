@@ -69,12 +69,12 @@ class endPoint
             if (empty($query)){
                 $query='dashboard';
             }
-            $this->loadTemplate($query);
+           self::loadTemplate($query);
             die();
         }
     }
 
-    private function loadTemplate($endpoint=null){
+    public static function loadTemplate($endpoint=null){
         if ( !is_user_logged_in() ) {
             wp_redirect( home_url( '/wp-login.php' ) );
             exit;
@@ -112,7 +112,7 @@ class endPoint
         if (is_dir($template_location) && file_exists($template_location)){
             $template_location=$template_location.'/index';
         }
-        $proccess=preg_replace('/\/edit$/','/add',$proccess);
+//        $proccess=preg_replace('/\/edit$/','/add',$proccess);
         $template_location=preg_replace('/\/edit$/','/add',$template_location);
 
         if (isset($_REQUEST['_wpnonce'])) {
