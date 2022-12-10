@@ -103,6 +103,14 @@ class endPoint
                 unset($query_explode[$key+1]);
             }
             $endpoint=implode('/',$query_explode);
+        }elseif(in_array('website',$query_explode) && is_numeric($query_explode[array_search('website',$query_explode)+1])){
+            $key=array_search('website',$query_explode);
+            $id=$query_explode[$key+1]??false;
+            if (is_numeric($id)){
+                set_query_var('website',$id);
+                unset($query_explode[$key+1]);
+            }
+            $endpoint=implode('/',$query_explode);
         }
 
         set_query_var('hamsaz','hamsaz/'.$endpoint);

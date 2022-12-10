@@ -20,15 +20,15 @@ extract(hsaz_default_args($default_args,$arg));
     <div class="row " >
         <div class="col s12 m8 l6 push-m2 push-l3 ">
             <?php if (isset($_POST['errors'])): foreach ($_POST['errors'] as $error): ?>
-            <div class="card-alert card red">
-                <div class="card-content white-text">
-                    <p><?php echo $error ?></p>
+                <div class="card-alert card red">
+                    <div class="card-content white-text">
+                        <p><?php echo $error ?></p>
+                    </div>
+                    <button type="button" class="close white-text mt-1" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </div>
-                <button type="button" class="close white-text mt-1" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-<?php endforeach;endif; ?>
+            <?php endforeach;endif; ?>
             <div id="validation" class="card card card-default scrollspy">
                 <div class="card-content">
                     <form enctype="multipart/form-data" data-bitwarden-watching="1" method="post">

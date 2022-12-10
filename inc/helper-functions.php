@@ -64,3 +64,10 @@ function hsaz_active_menu($current_menu_array='', $active_class='active',$parent
 function hamyar_saz_get_admin_url($url=''){
     return get_site_url(null,implode('/',['/hamsaz',trim($url,'/')]));
 }
+
+function hmyarsaz_set_error($message,$reset=true){
+    if ($reset){
+        $_POST['errors']=[];
+    }
+    $_POST['errors'][]=$message;
+}

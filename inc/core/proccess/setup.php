@@ -24,6 +24,9 @@ if (strlen($_REQUEST['title'])>50){
     return;
 }
 
-$package->createPackage(null,$_REQUEST['title'],$_REQUEST['category']);
+if(empty($package->createPackage(null,$_REQUEST['title'],$_REQUEST['category']))){
+    return;
+}
 
+//fixme after create site start site wizard
 wp_redirect(home_url('hamsaz/dashboard'));

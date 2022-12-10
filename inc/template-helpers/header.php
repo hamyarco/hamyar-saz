@@ -7,7 +7,19 @@ $default_args = [
     'direct_styles' => [],
 ];
 extract(hsaz_default_args($default_args,$arg));
-
+$website = get_query_var( 'website' );
+if (is_numeric($website)):
+    global $website_object;
+    $website_object = \HamyarSaz\core\package::get_instance()->getPackages(null,$website);
+    if (empty($website_object)){
+        header("Location: ".home_url('/hamsaz/dashboard/'));
+        return;
+    }
+    $website_object=$website_object[0];
+    $title = $website_object->title;
+else:
+    $title = 'همیار ساز';
+endif;
 ?>
 <!DOCTYPE html>
 <html class="loading" lang="fa" data-textdirection="rtl">
@@ -57,13 +69,13 @@ extract(hsaz_default_args($default_args,$arg));
     if (strpos($location,'?')!==false){
         $location=substr($_SERVER['REQUEST_URI'],0, strpos($_SERVER['REQUEST_URI'],'?'));
     }
-    if ($location==='/hamsaz/dashboard/' || $location==='/hamsaz/'): ?>
+
+    if (strpos( $location, "/dashboard/" ) !== false || $location === '/hamsaz/' || (is_numeric( $website ) && $location === "/hamsaz/website/{$website}/")):?>
         <div class="row navbar navbar-fixed">
             <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark gradient-45deg-indigo-purple no-shadow">
                 <div class="nav-wrapper">
                     <a class="btn dropdown-settings waves-effect waves-light breadcrumbs-btn right show-on-medium-and-down" href="#!" data-target="dropdown1"><i class="material-icons show-on-medium-and-down">settings</i>
                         <?php \HamyarSaz\core\helpers::template( 'setting-navbar'); ?>
-                    </a>
                 </div>
             </nav>
         </div>
@@ -116,12 +128,18 @@ extract(hsaz_default_args($default_args,$arg));
                                 hsaz_e( $title) ?></span></h5>
                     </div>
                     <div class="col s2 m6 l6">
-                        <?php if ($location==='/hamsaz/dashboard/' || $location==='/hamsaz/'): ?>
+                        <?php $website=get_query_var('website') ?>
+                        <?php if (strpos($location ,"/dashboard/")!==false || $location==='/hamsaz/' || (is_numeric($website) && $location==="/hamsaz/website/{$website}/")): ?>
                             <a class="btn dropdown-settings waves-effect waves-light breadcrumbs-btn right hide-on-med-and-down" href="#!" data-target="dropdown1"><i class="material-icons hide-on-med-and-up">settings</i>
-                                <?php \HamyarSaz\core\helpers::template( 'setting-navbar'); ?></a>
-                        <?php else: ?>
-                            <a class="btn waves-effect waves-light breadcrumbs-btn right hide-on-med-and-down mr-2 back-dashboard" href="<?php echo hamyar_saz_get_admin_url('/dashboard') ?>"><i class="material-icons ">keyboard_backspace</i>
+                                <?php \HamyarSaz\core\helpers::template( 'setting-navbar'); ?>
+                        <?php else:
+                            if (strpos($location,'dashboard')===false && is_numeric($website)): ?>
+                            <a class="btn waves-effect waves-light breadcrumbs-btn right hide-on-med-and-down mr-2 back-dashboard" href="<?php echo hamyar_saz_get_admin_url("/website/{$website}/dashboard") ?>"><i class="material-icons ">keyboard_backspace</i>
                             </a>
+                            <?php else: ?>
+                                <a class="btn waves-effect waves-light breadcrumbs-btn right hide-on-med-and-down mr-2 back-dashboard" href="<?php echo hamyar_saz_get_admin_url('/hamsaz/dashboard/') ?>"><i class="material-icons ">keyboard_backspace</i>
+                                </a>
+                                <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>

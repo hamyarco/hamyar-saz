@@ -79,7 +79,12 @@ class package
         }
         global $wpdb;
         $table=$this->getTable();
-        $wpdb->insert($table,array('user_id'=>$user_id,'title'=>$title,'category'=>$category),array('%d','%s','%s'));
+        $whmcs=new whmcs();
+        $whmcs_uid=$whmcs->getUID($user_id);
+        if (empty($whmcs_uid)){
+            return false;
+        }
+        $wpdb->insert($table,array('user_id'=>$user_id,'title'=>$title,'category'=>$category,'whmcs_uid'=>$whmcs_uid),array('%d','%s','%s','%d'));
         return $wpdb->insert_id;
     }
 }
