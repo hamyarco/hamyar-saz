@@ -79,10 +79,10 @@ class endPoint
             wp_redirect( home_url( '/wp-login.php' ) );
             exit;
         }
-
-        if ( !current_user_can( 'administrator' ) ) {
-            wp_die( 'شما دسترسی لازم برای دسترسی به این صفحه را ندارید' );
-        }
+//fixme check permission if need some item. example if user paid or not
+//        if ( !current_user_can( 'administrator' ) ) {
+//            wp_die( 'شما دسترسی لازم برای دسترسی به این صفحه را ندارید' );
+//        }
 
         $query_explode=explode('/',$endpoint);
         $query_explode=array_filter($query_explode);

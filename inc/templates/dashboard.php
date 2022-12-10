@@ -1,7 +1,7 @@
 <?php   defined('ABSPATH') || exit ("no access");
 $site_list=\HamyarSaz\core\package::get_instance()->getPackages();
 if (empty($site_list)){
-    header("Location: ".home_url('/hamsaz/start/'));
+    header("Location: ".home_url('/hamsaz/setup/'));
 //    \HamyarSaz\core\endPoint::loadTemplate('start');
     return;
 }

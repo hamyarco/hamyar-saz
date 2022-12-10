@@ -31,6 +31,7 @@ class ajax{
 
     public static function hasPermission()
     {
+        return true; //fixme check permission if need some item. example if user paid or not
         if (!current_user_can('administrator')  ) {
             wp_send_json_error(['message'=>'شما اجازه دسترسی به این بخش را ندارید']);
         }

@@ -22,7 +22,7 @@ define('HAMYAR_SAZ_DIR', plugin_dir_path(HAMYAR_SAZ_FILE));
 define('HAMYAR_SAZ_URL', plugin_dir_url(HAMYAR_SAZ_FILE));
 define('HAMYAR_SAZ_ASSETS_URL', HAMYAR_SAZ_URL.'assets/');
 define('HAMYAR_SAZ_MATERIALIZE_URL', HAMYAR_SAZ_URL.'materialize/');
-define('HAMYAR_SAZ_VER', '1.0.2');
+define('HAMYAR_SAZ_VER', file_get_contents(HAMYAR_SAZ_DIR.'version'));
 define('HAMYAR_SAZ_AUTOLOAD', __DIR__.'/inc/vendor/autoload.php');
 
 require_once HAMYAR_SAZ_AUTOLOAD;

@@ -4,7 +4,8 @@ var rename = require('gulp-rename');
 var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var sass = require('gulp-sass')(require('sass'));
+const sass = require('gulp-sass')(require('sass'));
+// sass.compiler = require('sass');
 var autoprefixer = require('gulp-autoprefixer');
 var minifyCss = require('gulp-minify-css');
 var fs = require('fs');
@@ -19,17 +20,18 @@ var JS_OUTPUT_ALL = 'final.min.js';
 var CSS_OUTPUT_FILE = 'style.css';
 
 
-gulp.task('plugin-javascript', function () {
+gulp.task('plugin-javascript', function (done) {
     //this must minify and compact with together
-    return gulp.src(PLUGIN_SOURCE + '/*/*.js')
+    gulp.src(PLUGIN_SOURCE + '/*/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
         .pipe(concat('plugins.js'))
-        .pipe(gulp.dest(PUBLIC_DEST))
+        .pipe(gulp.dest(PUBLIC_DEST));
+    done();
 });
 
-gulp.task('plugin-style', function () {
-    return gulp.src(PLUGIN_SOURCE + '/*/*.css')
+gulp.task('plugin-style', function (done) {
+    gulp.src(PLUGIN_SOURCE + '/*/*.css')
         .pipe(plumber({
             errorHandler: function (error) {
                 console.log(error.message);
@@ -39,57 +41,62 @@ gulp.task('plugin-style', function () {
         .pipe(sass())
         .pipe(autoprefixer('last 2 versions'))
         .pipe(concat('plugins.css'))
-        .pipe(gulp.dest(PUBLIC_DEST))
+        .pipe(gulp.dest(PUBLIC_DEST));
+    done();
 });
 
-gulp.task('javascript', function () {
+gulp.task('javascript', function (done) {
     //this must minify and compact with together
-    return gulp.src([
+     gulp.src([
         PUBLIC_DEST+JS_SOURCE + '/*.js',
     ])
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
         .pipe(concat(JS_OUTPUT_FILE))
         .pipe(uglify())
-        .pipe(gulp.dest(PUBLIC_DEST))
+        .pipe(gulp.dest(PUBLIC_DEST));
+    done();
 });
 
-gulp.task('javascript_compactor',gulp.series('javascript',  function () {
+gulp.task('javascript_compactor',gulp.series('javascript',  function (done) {
     //this is packages that need for other item and then compact with all item
-    return gulp.src([
+    gulp.src([
         PUBLIC_DEST + JS_OUTPUT_FILE,
     ])
         .pipe(concat(JS_OUTPUT_ALL))
-        .pipe(gulp.dest(PUBLIC_DEST))
+        .pipe(gulp.dest(PUBLIC_DEST));
+    done();
 }));
 
 
-gulp.task('admin_javascript', function () {
+gulp.task('admin_javascript', function (done) {
     //this must minify and compact with together
-   return gulp.src([
+   gulp.src([
        ADMIN_DEST+JS_SOURCE + '/*.js',
     ])
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
         .pipe(concat(JS_OUTPUT_FILE))
         .pipe(uglify())
-        .pipe(gulp.dest(ADMIN_DEST))
+        .pipe(gulp.dest(ADMIN_DEST));
+    done();
 });
 
-gulp.task('admin_javascript_compactor',gulp.series('admin_javascript',  function () {
+gulp.task('admin_javascript_compactor',gulp.series('admin_javascript',  function (done) {
     //this is packages that need for other item and then compact with all item
-    return gulp.src([
+    gulp.src([
         ADMIN_DEST + JS_OUTPUT_FILE,
     ])
         .pipe(concat(JS_OUTPUT_ALL))
-        .pipe(gulp.dest(ADMIN_DEST))
+        .pipe(gulp.dest(ADMIN_DEST));
+    done();
 }));
 
 
 
 
-gulp.task('css_creator', function () {
-    return gulp.src(
+gulp.task('css_creator', function (done) {
+     gulp.src(
         [
             PUBLIC_DEST+CSS_SOURCE + '/*.scss'
             ]
@@ -105,11 +112,12 @@ gulp.task('css_creator', function () {
         .pipe(concat(CSS_OUTPUT_FILE))
         .pipe(rename({suffix: '.min'}))
         .pipe(minifyCss())
-        .pipe(gulp.dest(PUBLIC_DEST))
+        .pipe(gulp.dest(PUBLIC_DEST));
+    done();
 });
 
-gulp.task('admin_css_creator', function () {
-    return gulp.src([
+gulp.task('admin_css_creator', function (done) {
+     gulp.src([
         ADMIN_DEST+CSS_SOURCE + '/*.scss'
     ])
         .pipe(plumber({
@@ -124,14 +132,19 @@ gulp.task('admin_css_creator', function () {
         .pipe(gulp.dest(ADMIN_DEST))
         .pipe(rename({suffix: '.min'}))
         .pipe(minifyCss())
-        .pipe(gulp.dest(ADMIN_DEST))
+        .pipe(gulp.dest(ADMIN_DEST));
+    done();
 });
 
 //add version to one file for later check
 gulp.task('increment-version',async function(){
-
-    var docString = fs.readFileSync('./version', 'utf8');
-
+    try {
+        var docString = fs.readFileSync('./version', 'utf8');
+    } catch (err) {
+        console.log(err);
+        require('fs').writeFileSync('./version', '1.0.0');
+        return;
+    }
     //The code below gets your semantic v# from docString
     var versionNumPattern=/(.*)/; //This is just a regEx with a capture group for version number
     var vNumRexEx = new RegExp(versionNumPattern);
@@ -163,9 +176,11 @@ gulp.task('default'
         'admin_javascript_compactor',
         'plugin-javascript',
         'plugin-style',
-        function () {
+        'increment-version',
+        function (done) {
             gulp.watch([PUBLIC_DEST+JS_SOURCE + '/*.js', PUBLIC_DEST+JS_SOURCE + '/**/*.js'], gulp.series(['javascript_compactor','increment-version']));
             gulp.watch([ADMIN_DEST+JS_SOURCE + '/*.js', ADMIN_DEST+JS_SOURCE + '/**/*.js'], gulp.series(['admin_javascript_compactor','increment-version']));
             gulp.watch([PUBLIC_DEST+CSS_SOURCE + '/*.scss', PUBLIC_DEST+CSS_SOURCE + '/**/*.scss'], gulp.series('css_creator','increment-version'));
             gulp.watch([ADMIN_DEST+CSS_SOURCE + '/*.scss', ADMIN_DEST+CSS_SOURCE + '/**/*.scss'], gulp.series('admin_css_creator','increment-version'));
+            done();
         }));

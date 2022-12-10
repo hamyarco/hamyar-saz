@@ -44,6 +44,8 @@ class package
 		  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 		  `user_id` bigint(20) unsigned NOT NULL,
 		  `domain` varchar(20) NOT NULL,
+		  `title` varchar(500) NOT NULL,
+		  `category` int(3) default NULL,
 		  `status` varchar(20) default NULL,
           `whmcs_uid` bigint(20) unsigned NOT NULL,
           `site_token` varchar(500) default NULL,
@@ -55,7 +57,7 @@ class package
         dbDelta($query);
     }
 
-    public function getPackages($user_id=null)
+    public function getPackages($user_id=null,$id=null)
     {
         if (is_null($user_id)){
             $user_id=get_current_user_id();
@@ -63,7 +65,21 @@ class package
         global $wpdb;
         $table=$this->getTable();
         $query="SELECT * FROM $table WHERE user_id=$user_id";
+        if (!is_null($id)){
+            $query.=" AND id=$id ";
+        }
         $result=$wpdb->get_results($query);
         return $result;
+    }
+
+    public function createPackage($user_id=null,$title,$category)
+    {
+        if (is_null($user_id)){
+            $user_id=get_current_user_id();
+        }
+        global $wpdb;
+        $table=$this->getTable();
+        $wpdb->insert($table,array('user_id'=>$user_id,'title'=>$title,'category'=>$category),array('%d','%s','%s'));
+        return $wpdb->insert_id;
     }
 }
